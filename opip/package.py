@@ -26,6 +26,17 @@ class Package:
         except subprocess.CalledProcessError:
             return False
 
+    def uninstall(self) -> bool:
+        try:
+            subprocess.check_call(
+                [*PIP_EXECUTE_ITEMS, 'uninstall', self.name],
+                stdout=FNULL,
+                stderr=subprocess.STDOUT
+            )
+            return True
+        except subprocess.CalledProcessError:
+            return False
+
     def get_version(self) -> Optional[str]:
         process = subprocess.Popen([*Package.PIP_EXECUTE_ITEMS, 'freeze'], stdout=subprocess.PIPE)
         packages = process.communicate()[0].decode('utf-8').split('\n')
